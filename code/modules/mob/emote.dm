@@ -57,7 +57,9 @@
 			 * x-ray is so rare these days anyways. (On Extended maybe, outside of R&D)
 			 */
 			for (var/mob/O in viewers(get_turf(src), null) | get_mobs_in_view(world.view,src)) //Modified by Ace to bypass problems, that said, get_turf should solve this
-
+				/*
+				Leshana - This appears to be unnecessary, because holders and prey are already in viewers()
+				This is not 100% understood in all cases, delete this code entirely only after full testing.
 				if(O.status_flags & PASSEMOTES)
 
 					for(var/obj/item/weapon/holder/H in O.contents)
@@ -65,7 +67,7 @@
 
 					for(var/mob/living/M in O.contents)
 						M.show_message(message, m_type)
-
+				*/
 				O.show_message(message, m_type)
 
 			for(var/obj/O in seeing_obj)
