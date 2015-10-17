@@ -179,6 +179,7 @@
 		numbered_contents = list()
 		adjusted_contents = 0
 		for(var/obj/item/I in contents)
+			I.screen_loc = null // Reset so standard_orient_objs starts with a clean slate
 			var/found = 0
 			for(var/datum/numbered_display/ND in numbered_contents)
 				if(ND.sample_object.type == I.type)
