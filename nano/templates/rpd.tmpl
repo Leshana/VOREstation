@@ -1,0 +1,77 @@
+<!-- 
+Title: RPD UI 
+Used In File(s): D:\Development\SS13-BS12\code\game\objects\item\weapons\RPD.dm
+-->
+
+
+
+
+
+<div class="item">
+	<div class="itemLabel">Energy:</div>
+	<div class="itemContent">
+		{{:helper.displayBar(data.energy, 0, data.maxEnergy, 'good', data.energy + ' Units')}}
+	</div>
+</div>
+
+<div class="item">
+	<div class="itemLabel">Metal:</div>
+	<div class="itemContent">
+		{{:helper.displayBar(data.metal, 0, data.maxMetal, 'good', data.energy + ' Units')}}
+	</div>
+</div>
+
+<table>
+	<tr><td>{{:helper.link('Make Pipes',		'folder', { 'makepipes' : 1},		data.mode == 'pipes' ? 'selected' : null)}}
+	<tr><td>{{:helper.link('Make Disposals',	'folder', { 'makedisposals' : 1},	data.mode == 'disposals' ? 'selected' : null)}}
+	<tr><td>{{:helper.link('Eat Pipes, 			'folder', { 'eatpipes' : 1},		data.mode == 'eating' ? 'selected' : null)}}
+	<tr><td>{{:helper.link('Paint Pipes', 		'folder', { 'paintpipes' : 1},		data.mode == 'paint' ? 'selected' : null)}}		
+</table>
+
+{{if !data.mode || data.mode == 'pipes'}}
+<div class="item">
+	{{if data.contents}}
+		{{for data.contents}}
+			<div class="item">
+			</div>
+		{{/for}}
+	{{/if}}
+</div>
+
+{{else data.mode == 'disposals'}}
+{{else data.mode == 'eating'}}
+{{else data.mode == 'paint'}}
+{{/if}}
+ 
+<div class="item">
+  <h2>Storage</h2>
+  {{if data.secure}}
+    <span class='notice'>
+      {{:data.locked == -1 ? "Sec.re ACC_** //):securi_nt.diag=>##'or 1=1'%($..." : "Secure Access: Please have your identification ready."}}
+    </span>
+  {{/if}}
+</div>
+<div class='item'>
+  {{if data.contents}}
+    {{for data.contents}}
+      <div class='item'>
+        <span class='highlight'>{{:value.display_name}} ({{:value.quantity}} available)</span>
+        <div style="float: left;">Vend:&nbsp;</div> {{:helper.link('x1', 'circle-arrow-s', { "vend" : value.vend, "amount" : 1 }, null, 'statusValue')}}
+		{{if value.quantity >= 5}}
+			{{:helper.link('x5', 'circle-arrow-s', { "vend" : value.vend, "amount" : 5 }, null, 'statusValue')}}
+		{{/if}}
+		{{if value.quantity >= 10}}
+			{{:helper.link('x10', 'circle-arrow-s', { "vend" : value.vend, "amount" : 10 }, null, 'statusValue')}}
+		{{/if}}
+		{{if value.quantity >= 25}}
+			{{:helper.link('x25', 'circle-arrow-s', { "vend" : value.vend, "amount" : 25 }, null, 'statusValue')}}
+		{{/if}}
+		{{if value.quantity > 1}}
+			{{:helper.link('All', 'circle-arrow-s', { "vend" : value.vend, "amount" : value.quantity }, null, 'statusValue')}}
+		{{/if}}
+      </div>
+    {{/for}}
+  {{else}}
+    <span class='average'>No products loaded.</span>
+  {{/if}}
+</div>
