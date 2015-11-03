@@ -282,43 +282,10 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 				pass = 1
 
 			if(pass)
-
 				for (var/obj/machinery/requests_console/Console in allConsoles)
 					if (ckey(Console.department) == ckey(href_list["department"]))
-
-						switch(priority)
-							if("2")		//High priority
-								if(Console.newmessagepriority < 2)
-									Console.newmessagepriority = 2
-									Console.icon_state = "req_comp2"
-								if(!Console.silent)
-									playsound(Console.loc, 'sound/machines/twobeep.ogg', 50, 1)
-									for (var/mob/O in hearers(5, Console.loc))
-										O.show_message(text("\icon[Console] *The Requests Console beeps: 'PRIORITY Alert in [department]'"))
-								Console.messages += "<B><FONT color='red'>High Priority message from <A href='?src=\ref[Console];write=[ckey(department)]'>[department]</A></FONT></B><BR>[sending]"
-
-		//					if("3")		//Not implemanted, but will be 		//Removed as it doesn't look like anybody intends on implimenting it ~Carn
-		//						if(Console.newmessagepriority < 3)
-		//							Console.newmessagepriority = 3
-		//							Console.icon_state = "req_comp3"
-		//						if(!Console.silent)
-		//							playsound(Console.loc, 'sound/machines/twobeep.ogg', 50, 1)
-		//							for (var/mob/O in hearers(7, Console.loc))
-		//								O.show_message(text("\icon[Console] *The Requests Console yells: 'EXTREME PRIORITY alert in [department]'"))
-		//						Console.messages += "<B><FONT color='red'>Extreme Priority message from [ckey(department)]</FONT></B><BR>[message]"
-
-							else		// Normal priority
-								if(Console.newmessagepriority < 1)
-									Console.newmessagepriority = 1
-									Console.icon_state = "req_comp1"
-								if(!Console.silent)
-									playsound(Console.loc, 'sound/machines/twobeep.ogg', 50, 1)
-									for (var/mob/O in hearers(4, Console.loc))
-										O.show_message(text("\icon[Console] *The Requests Console beeps: 'Message from [department]'"))
-								Console.messages += "<B>Message from <A href='?src=\ref[Console];write=[ckey(department)]'>[department]</A></FONT></B><BR>[message]"
-
+						Console.deliver_message(priority, department, sending)
 						screen = 6
-						Console.luminosity = 2
 				messages += "<B>Message sent to [dpt]</B><BR>[message]"
 			else
 				for (var/mob/O in hearers(4, src.loc))
@@ -366,7 +333,42 @@ var/list/obj/machinery/requests_console/allConsoles = list()
 	updateUsrDialog()
 	return
 
-					//err... hacking code, which has no reason for existing... but anyway... it's supposed to unlock priority 3 messanging on that console (EXTREME priority...) the code for that actually exists.
+/** Actually deliver a message to the requests console, raising an auditory alarm if so configured. */
+/obj/machinery/requests_console/proc/deliver_message(var/msg_priority, var/msg_department, var/msg_body)
+
+	switch(msg_priority)
+		if("2")		//High priority
+			if(src.newmessagepriority < 2)
+				src.newmessagepriority = 2
+				src.icon_state = "req_comp2"
+			if(!src.silent)
+				playsound(src.loc, 'sound/machines/twobeep.ogg', 50, 1)
+				for (var/mob/O in hearers(5, src.loc))
+					O.show_message(text("\icon[src] *The Requests Console beeps: 'PRIORITY Alert from [msg_department]'"))
+			src.messages += "<B><FONT color='red'>High Priority message from <A href='?src=\ref[src];write=[ckey(msg_department)]'>[msg_department]</A></FONT></B><BR>[msg_body]"
+		if("3")		//Not implemented, but will be
+			if(src.newmessagepriority < 3)
+				src.newmessagepriority = 3
+				src.icon_state = "req_comp3"
+			if(!src.silent)
+				playsound(src.loc, 'sound/machines/twobeep.ogg', 50, 1)
+				for (var/mob/O in hearers(7, src.loc))
+					O.show_message(text("\icon[src] *The Requests Console yells: 'EXTREME PRIORITY alert from [msg_department]'"))
+			src.messages += "<B><FONT color='red'>Extreme Priority message from [ckey(msg_department)]</FONT></B><BR>[msg_body]"
+		else		// Normal priority
+			if(src.newmessagepriority < 1)
+				src.newmessagepriority = 1
+				src.icon_state = "req_comp1"
+			if(!src.silent)
+				playsound(src.loc, 'sound/machines/twobeep.ogg', 50, 1)
+				for (var/mob/O in hearers(4, src.loc))
+					O.show_message(text("\icon[src] *The Requests Console beeps: 'Message from [msg_department]'"))
+			src.messages += "<B>Message from <A href='?src=\ref[src];write=[ckey(msg_department)]'>[msg_department]</A></FONT></B><BR>[msg_body]"
+	src.luminosity = 2
+
+
+
+//err... hacking code, which has no reason for existing... but anyway... it's supposed to unlock priority 3 messanging on that console (EXTREME priority...) the code for that actually exists.
 /obj/machinery/requests_console/attackby(var/obj/item/weapon/O as obj, var/mob/user as mob)
 	/*
 	if (istype(O, /obj/item/weapon/crowbar))
