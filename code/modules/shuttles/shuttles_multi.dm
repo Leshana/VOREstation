@@ -44,7 +44,9 @@
 
 
 /obj/machinery/computer/shuttle_control/multi
-	icon_state = "syndishuttle"
+	icon_state = "frame"
+	screenicon = "syndishuttle"
+	keyboardicon = "kb15"
 
 /obj/machinery/computer/shuttle_control/multi/attack_hand(user as mob)
 
